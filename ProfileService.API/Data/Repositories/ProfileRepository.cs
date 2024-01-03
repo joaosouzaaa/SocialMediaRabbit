@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProfileService.API.Entities;
+using ProfileService.API.Domain.Entities;
 using ProfileService.API.Interfaces.Repositories;
 using UserService.API.Data.DatabaseContexts;
 
@@ -29,8 +29,12 @@ public sealed class ProfileRepository : IProfileRepository
         return await SaveChangesAsync();
     }
 
-    public void Dispose() =>
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+
         _dbContext.Dispose();
+    }
 
     private async Task<bool> SaveChangesAsync() =>
         await _dbContext.SaveChangesAsync() > 0;

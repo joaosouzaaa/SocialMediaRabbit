@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProfileService.API.Entities;
 
 namespace UserService.API.Data.DatabaseContexts;
 
@@ -9,8 +8,6 @@ public sealed class ProfileDbContext : DbContext
 	{
 
 	}
-
-	public DbSet<Profile> Profiles { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{

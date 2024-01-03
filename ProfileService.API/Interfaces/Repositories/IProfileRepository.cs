@@ -1,4 +1,4 @@
-﻿using ProfileService.API.Entities;
+﻿using ProfileService.API.Domain.Entities;
 
 namespace ProfileService.API.Interfaces.Repositories;
 

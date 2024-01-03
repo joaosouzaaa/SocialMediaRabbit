@@ -1,4 +1,4 @@
-﻿namespace ProfileService.API.Entities;
+﻿namespace ProfileService.API.Domain.Entities;
 
 public sealed class Profile
 {
