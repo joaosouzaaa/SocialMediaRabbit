@@ -6,10 +6,10 @@ using ProfileMicroService.API.Settings.PaginationSettings;
 
 namespace ProfileMicroService.API.Data.Repositories;
 
-public sealed class ProfileRepository : IProfileRepository
+public sealed class ProfileRepository : IProfileRepository, IDisposable
 {
     private readonly ProfileDbContext _dbContext;
-    private DbSet<Profile> _dbContextSet => _dbContext.Set<Profile>();
+    private DbSet<Profile> DbContextSet => _dbContext.Set<Profile>();
 
     public ProfileRepository(ProfileDbContext dbContext)
     {
@@ -18,15 +18,15 @@ public sealed class ProfileRepository : IProfileRepository
 
     public async Task<bool> AddAsync(Profile profile)
     {
-        await _dbContextSet.AddAsync(profile);
+        await DbContextSet.AddAsync(profile);
 
-        return await SaveChangesAsync();
+        return await _dbContext.SaveChangesAsync() > 0;
     }
 
     public async Task<PageList<Profile>> GetAllPaginatedAsync(PageParameters pageParameters)
     {
-        var profileList = await _dbContextSet.Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize).Take(pageParameters.PageSize).AsNoTracking().ToListAsync();
-        var count = await _dbContextSet.CountAsync();
+        var profileList = await DbContextSet.Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize).Take(pageParameters.PageSize).AsNoTracking().ToListAsync();
+        var count = await DbContextSet.CountAsync();
 
         return new PageList<Profile>(profileList, count, pageParameters);
     }
@@ -37,7 +37,4 @@ public sealed class ProfileRepository : IProfileRepository
 
         _dbContext.Dispose();
     }
-
-    private async Task<bool> SaveChangesAsync() =>
-        await _dbContext.SaveChangesAsync() > 0;
 }

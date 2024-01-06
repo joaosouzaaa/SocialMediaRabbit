@@ -8,7 +8,9 @@ public sealed class ProfileMapping : IEntityTypeConfiguration<Profile>
 {
     public void Configure(EntityTypeBuilder<Profile> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.ToTable(nameof(Profile));
+
+        builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Username)
             .HasColumnName("username")

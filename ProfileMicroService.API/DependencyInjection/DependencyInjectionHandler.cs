@@ -6,11 +6,10 @@ namespace ProfileMicroService.API.DependencyInjection;
 
 public static class DependencyInjectionHandler
 {
-    public static void AddDependencyInjectionHandler(this IServiceCollection services, IConfiguration configuration)
+    public static void AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddCorsDependencyInjection();
 
-        var rm = configuration.GetConnectionString();
         services.AddDbContext<ProfileDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString());
