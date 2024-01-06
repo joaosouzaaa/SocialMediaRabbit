@@ -6,6 +6,7 @@ using ProfileMicroService.API.Interfaces.NotificationSettings;
 using ProfileMicroService.API.Interfaces.Repositories;
 using ProfileMicroService.API.Interfaces.Services;
 using ProfileMicroService.API.Settings.NotificationSettings;
+using ProfileMicroService.API.Settings.PaginationSettings;
 
 namespace ProfileMicroService.API.Services;
 
@@ -33,6 +34,13 @@ public sealed class ProfileService : IProfileService
             return false;
 
         return await _profileRepository.AddAsync(profile);
+    }
+
+    public async Task<PageList<ProfileResponse>> GetAllPaginatedAsync(PageParameters pageParameters)
+    {
+        var profilePageList = await _profileRepository.GetAllPaginatedAsync(pageParameters);
+
+        return _profileMapper.DomainPageListToResponsePageList(profilePageList);
     }
 
     private async Task<bool> IsValidAsync(Profile profile)

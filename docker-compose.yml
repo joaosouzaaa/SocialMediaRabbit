@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+    image: "rabbitmq:3.9-management"
+    ports:
+      - "5672:5672"  
+      - "15672:15672"  
+    environment:
+      RABBITMQ_DEFAULT_USER: "username"
+      RABBITMQ_DEFAULT_PASS: "user1234"
+
+  sqldataprofile:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql-container-profile
+    environment:
+      - SA_PASSWORD=TestProfile123
+      - ACCEPT_EULA=Y
+   
+  profilemicroservice.api:
+    image: ${DOCKER_REGISTRY-}profilemicroserviceapi
+    build:
+      context: .
+      dockerfile: ProfileMicroService.API/Dockerfile
+    environment:
+      - DOCKER_ENVIROMENT=DEV_DOCKER_PROFILE
+      - ASPNETCORE_ENVIROMENT=Development
+    ports:
+        - "5020:80"
+        - "5021:443"
+    depends_on:
+      - "sqldataprofile"
+      - "rabbitmq"

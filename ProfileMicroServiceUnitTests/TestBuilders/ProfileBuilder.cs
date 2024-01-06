@@ -6,6 +6,7 @@ public sealed class ProfileBuilder
 {
     private string _username = "test";
     private string _email = "valid@email.com";
+    private DateTime _creationDate = DateTime.Now;
 
     public static ProfileBuilder NewObject() =>
         new();
@@ -13,14 +14,21 @@ public sealed class ProfileBuilder
     public Profile DomainBuild() =>
         new()
         {
-            CreationDate = DateTime.UtcNow,
+            CreationDate = _creationDate,
             Email = _email,
             Username = _username,
             Id = 12
         };
 
     public ProfileSave SaveBuild() =>
-        new(_username, _email);
+        new(_username, 
+            _email);
+
+    public ProfileResponse ResponseBuild() =>
+        new(123,
+            _username,
+            _email,
+            _creationDate);
 
     public ProfileBuilder WithUsername(string username)
     {

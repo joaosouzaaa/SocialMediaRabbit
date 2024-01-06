@@ -2,6 +2,7 @@
 using ProfileMicroService.API.DataTransferObjects.Profile;
 using ProfileMicroService.API.Interfaces.Services;
 using ProfileMicroService.API.Settings.NotificationSettings;
+using ProfileMicroService.API.Settings.PaginationSettings;
 
 namespace ProfileMicroService.API.Controllers;
 [Route("api/[controller]")]
@@ -21,4 +22,10 @@ public sealed class ProfileController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public Task<bool> AddAsync([FromBody] ProfileSave profileSave) =>
         _profileService.AddAsync(profileSave);
+
+    [HttpGet("get-all-paginated")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PageList<ProfileResponse>))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public Task<PageList<ProfileResponse>> GetAllPaginatedAsync([FromQuery] PageParameters pageParameters) =>
+        _profileService.GetAllPaginatedAsync(pageParameters);
 }

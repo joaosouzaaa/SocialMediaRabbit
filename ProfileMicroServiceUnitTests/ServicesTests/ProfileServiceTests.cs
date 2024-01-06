@@ -8,6 +8,7 @@ using ProfileMicroService.API.Interfaces.NotificationSettings;
 using ProfileMicroService.API.Interfaces.Repositories;
 using ProfileMicroService.API.Services;
 using ProfileMicroService.API.Settings.NotificationSettings;
+using ProfileMicroService.API.Settings.PaginationSettings;
 using ProfileMicroServiceUnitTests.TestBuilders;
 
 namespace ProfileMicroServiceUnitTests.ServicesTests;
@@ -89,5 +90,56 @@ public sealed class ProfileMicroServiceTests
         _profileRepositoryMock.Verify(p => p.AddAsync(It.IsAny<Profile>()), Times.Never());
 
         Assert.False(addResult);
+    }
+
+    [Fact]
+    public async Task GetAllPaginatedAsync_SuccessfulScenario()
+    {
+        // A
+        var pageParameters = new PageParameters()
+        {
+            PageNumber = 123,
+            PageSize = 123
+        };
+
+        var profileList = new List<Profile>()
+        {
+            ProfileBuilder.NewObject().DomainBuild(),
+            ProfileBuilder.NewObject().DomainBuild(),
+        };
+        var profilePageList = new PageList<Profile>()
+        {
+            CurrentPage = 1,
+            PageSize = 123,
+            Result = profileList,
+            TotalCount = 123,
+            TotalPages = 9
+        };
+        _profileRepositoryMock.Setup(p => p.GetAllPaginatedAsync(It.IsAny<PageParameters>()))
+            .ReturnsAsync(profilePageList);
+
+        var profileResponseList = new List<ProfileResponse>()
+        {
+            ProfileBuilder.NewObject().ResponseBuild(),
+            ProfileBuilder.NewObject().ResponseBuild(),
+            ProfileBuilder.NewObject().ResponseBuild()
+        };
+        var profileResponsePageList = new PageList<ProfileResponse>()
+        {
+            CurrentPage = 1,
+            PageSize = 123,
+            Result = profileResponseList,
+            TotalCount = 123,
+            TotalPages = 9
+        };
+        _profileMapperMock.Setup(p => p.DomainPageListToResponsePageList(It.IsAny<PageList<Profile>>()))
+            .Returns(profileResponsePageList);
+
+        // A
+        var profileResponsePageListResult = await _profileService.GetAllPaginatedAsync(pageParameters);
+
+        // A
+        Assert.Equal(profileResponsePageListResult.Result.Count, profileResponsePageList.Result.Count);
+
     }
 }
