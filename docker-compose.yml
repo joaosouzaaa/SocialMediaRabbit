@@ -1,14 +1,14 @@
 version: '3.4'
 
 services:
-  rabbitmq:
+  rabbitmq-container:
     image: "rabbitmq:3.9-management"
     ports:
       - "5672:5672"  
       - "15672:15672"  
     environment:
-      RABBITMQ_DEFAULT_USER: "username"
-      RABBITMQ_DEFAULT_PASS: "user1234"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
 
   sqldataprofile:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -30,4 +30,26 @@ services:
         - "5021:443"
     depends_on:
       - "sqldataprofile"
-      - "rabbitmq"
+      - "rabbitmq-container"
+  
+  sqldatafollower:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql-container-follower
+    environment:
+      - SA_PASSWORD=TestFollow123
+      - ACCEPT_EULA=Y
+  
+  followermicroservice.api:
+    image: ${DOCKER_REGISTRY-}followermicroserviceapi
+    build:
+      context: .
+      dockerfile: FollowerMicroservice.API/Dockerfile
+    environment:
+      - DOCKER_ENVIROMENT=DEV_DOCKER_FOLLOWER
+      - ASPNETCORE_ENVIROMENT=Development
+    ports:
+      - "5030:80"
+      - "5031:443"
+    depends_on:
+      - "sqldatafollower"
+      - "rabbitmq-container"

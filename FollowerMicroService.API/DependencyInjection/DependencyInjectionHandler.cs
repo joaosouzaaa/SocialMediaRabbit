@@ -18,5 +18,8 @@ public static class DependencyInjectionHandler
         });
 
         services.AddRepositoriesDependencyInjection();
+        services.AddMassTransitDependencyInjection();
+        services.AddMappersDependencyInjection();
+        services.AddServicesDependencyInjection();
     }
 }
