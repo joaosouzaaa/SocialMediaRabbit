@@ -4,19 +4,21 @@ namespace FollowerMicroService.API.DependencyInjection;
 
 public static class MassTransitDependencyInjection
 {
-    public static void AddMassTransitDependencyInjection(this IServiceCollection services)
+    public static void AddMassTransitDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMassTransit(x =>
+        services.AddMassTransit(busConfigurator =>
         {
-            x.UsingRabbitMq((context, cfg) =>
+            busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+            busConfigurator.UsingRabbitMq((context, configurator) =>
             {
-                cfg.Host(new Uri("amqp://rabbitmq-container:5672"), h =>
+                configurator.Host(new Uri(configuration["RabbitMqCredentials:Host"]!), h =>
                 {
-                    h.Username("guest");
-                    h.Password("guest");
+                    h.Username(configuration["RabbitMqCredentials:Username"]);
+                    h.Password(configuration["RabbitMqCredentials:Password"]);
                 });
 
-                cfg.ConfigureEndpoints(context);
+                configurator.ConfigureEndpoints(context);
             });
         });
     }

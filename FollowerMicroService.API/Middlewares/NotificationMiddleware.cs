@@ -1,8 +1,7 @@
-﻿using ProfileMicroService.API.Enums;
-using ProfileMicroService.API.Settings.NotificationSettings;
+﻿using FollowerMicroService.API.Settings.NotificationSettings;
 using System.Text.Json;
 
-namespace ProfileMicroService.API.Middlewares;
+namespace FollowerMicroService.API.Middlewares;
 
 public sealed class NotificationMiddleware
 {
@@ -23,13 +22,15 @@ public sealed class NotificationMiddleware
         {
             context.Response.StatusCode = 400;
             context.Response.ContentType = "application/json";
+            
+            const string unexpectedErrorKey = "Unexpected Error";
 
             var response = new List<Notification>()
             {
                 new()
                 {
                     Message = exception.Message,
-                    Key = nameof(EMessage.UnexpectedError)
+                    Key = unexpectedErrorKey
                 }
             };
 

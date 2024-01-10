@@ -1,5 +1,6 @@
 using FollowerMicroService.API.Constants.CorsConstants;
 using FollowerMicroService.API.DependencyInjection;
+using FollowerMicroService.API.Middlewares;
 using FollowerMicroService.API.Settings.MigrationSettings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,5 +24,6 @@ app.UseCors(CorsPoliciesNamesConstants.CorsPolicy);
 app.UseAuthorization();
 app.MapControllers();
 app.MigrateDatabase();
+app.UseMiddleware<NotificationMiddleware>();
 
 app.Run();

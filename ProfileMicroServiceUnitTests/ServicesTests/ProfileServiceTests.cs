@@ -69,11 +69,11 @@ public sealed class ProfileMicroServiceTests
 
         var validationFailureList = new List<ValidationFailure>()
         {
-            new ValidationFailure("test", "error"),
-            new ValidationFailure("test", "error"),
-            new ValidationFailure("test", "error"),
-            new ValidationFailure("test", "error"),
-            new ValidationFailure("test", "error")
+            new("test", "error"),
+            new("test", "error"),
+            new("test", "error"),
+            new("test", "error"),
+            new("test", "error")
         };
         var validationResult = new ValidationResult()
         {

@@ -4,8 +4,9 @@ using FollowerMicroService.API.Entities;
 namespace FollowerMicroServiceUnitTests.TestBuilders;
 public sealed class FollowBuilder
 {
-    private int _followerId = 9;
-    private int _followingId = 123;
+    private static readonly Random _random = new();
+    private int _followerId = _random.Next();
+    private int _followingId = _random.Next();
 
     public static FollowBuilder NewObject() =>
         new();
@@ -15,7 +16,7 @@ public sealed class FollowBuilder
         {
             FollowerId = _followerId,
             FollowingId = _followingId,
-            Id = 123
+            Id = _random.Next()
         };
 
     public FollowSave SaveBuild() =>
@@ -24,4 +25,18 @@ public sealed class FollowBuilder
             FollowerId = _followerId,
             FollowingId = _followingId
         };
+
+    public FollowBuilder WithFollowerId(int followerId)
+    {
+        _followerId = followerId;
+
+        return this;
+    }
+
+    public FollowBuilder WithFollowingId(int followingId)
+    {
+        _followingId = followingId;
+
+        return this;
+    }
 }

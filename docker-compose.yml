@@ -1,11 +1,12 @@
 version: '3.4'
 
 services:
-  rabbitmq-container:
+  socialmediarabbitmq:
     image: "rabbitmq:3.9-management"
+    hostname: "socialmediarabbitmq"
     ports:
-      - "5672:5672"  
-      - "15672:15672"  
+      - "5672"
+      - "15672"
     environment:
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"
@@ -30,7 +31,7 @@ services:
         - "5021:443"
     depends_on:
       - "sqldataprofile"
-      - "rabbitmq-container"
+      - "socialmediarabbitmq"
   
   sqldatafollower:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -52,4 +53,4 @@ services:
       - "5031:443"
     depends_on:
       - "sqldatafollower"
-      - "rabbitmq-container"
+      - "socialmediarabbitmq"

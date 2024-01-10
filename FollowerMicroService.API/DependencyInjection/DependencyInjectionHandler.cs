@@ -17,9 +17,11 @@ public static class DependencyInjectionHandler
             options.EnableSensitiveDataLogging();
         });
 
+        services.AddMassTransitDependencyInjection(configuration);
+        services.AddFiltersDependencyInjection();
         services.AddRepositoriesDependencyInjection();
-        services.AddMassTransitDependencyInjection();
         services.AddMappersDependencyInjection();
+        services.AddSettingsDependencyInjection();
         services.AddServicesDependencyInjection();
     }
 }
