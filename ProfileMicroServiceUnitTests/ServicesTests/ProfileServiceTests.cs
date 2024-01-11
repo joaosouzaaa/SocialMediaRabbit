@@ -140,6 +140,21 @@ public sealed class ProfileMicroServiceTests
 
         // A
         Assert.Equal(profileResponsePageListResult.Result.Count, profileResponsePageList.Result.Count);
+    }
 
+    [Fact]
+    public async Task ExistsAsync_SuccessfulScenario_ReturnsResult()
+    {
+        // A
+        int id = 88;
+
+        _profileRepositoryMock.Setup(p => p.ExistsAsync(It.IsAny<int>()))
+            .ReturnsAsync(false);
+
+        // A
+        var existsResult = await _profileService.ExistsAsync(id);
+
+        // A
+        Assert.False(existsResult);
     }
 }

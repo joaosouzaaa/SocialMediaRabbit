@@ -24,7 +24,7 @@ public sealed class NotificationHandlerTests
         var notificationListResult = _notificationHandler.GetNotifications();
 
         // A
-        Assert.Equal(notificationListResult.Count, notificationCount);
+        Assert.Equal(notificationCount, notificationListResult.Count);
     }
 
     [Fact]

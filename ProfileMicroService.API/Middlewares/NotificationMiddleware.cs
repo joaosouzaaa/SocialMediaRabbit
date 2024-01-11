@@ -1,4 +1,5 @@
 ﻿using ProfileMicroService.API.Enums;
+using ProfileMicroService.API.Extensions;
 using ProfileMicroService.API.Settings.NotificationSettings;
 using System.Text.Json;
 
@@ -19,16 +20,16 @@ public sealed class NotificationMiddleware
         {
             await _next(context);
         }
-        catch (Exception exception)
+        catch
         {
-            context.Response.StatusCode = 400;
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Response.ContentType = "application/json";
 
             var response = new List<Notification>()
             {
                 new()
                 {
-                    Message = exception.Message,
+                    Message = EMessage.UnexpectedError.Description(),
                     Key = nameof(EMessage.UnexpectedError)
                 }
             };

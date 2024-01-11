@@ -55,4 +55,20 @@ public sealed class ProfileMapperTests
         Assert.Equal(profileResponsePageListResult.TotalCount, profilePageList.TotalCount);
         Assert.Equal(profileResponsePageListResult.TotalPages, profilePageList.TotalPages);
     }
+
+    [Fact]
+    public void DomainToResponse_SuccessfulScenario()
+    {
+        // A
+        var profile = ProfileBuilder.NewObject().DomainBuild();
+
+        // A
+        var profileResponseResult = _profileMapper.DomainToResponse(profile);
+
+        // A
+        Assert.Equal(profileResponseResult.Id, profile.Id);
+        Assert.Equal(profileResponseResult.Username, profile.Username);
+        Assert.Equal(profileResponseResult.Email, profile.Email);
+        Assert.Equal(profileResponseResult.CreationDate, profile.CreationDate);
+    }
 }

@@ -4,6 +4,7 @@ using ProfileMicroService.API.Entities;
 namespace ProfileMicroServiceUnitTests.TestBuilders;
 public sealed class ProfileBuilder
 {
+    private static readonly Random _random = new();
     private string _username = "test";
     private string _email = "valid@email.com";
     private DateTime _creationDate = DateTime.Now;
@@ -17,18 +18,21 @@ public sealed class ProfileBuilder
             CreationDate = _creationDate,
             Email = _email,
             Username = _username,
-            Id = 12
+            Id = _random.Next()
         };
 
     public ProfileSave SaveBuild() =>
-        new(_username, 
+        new(_username,
             _email);
 
     public ProfileResponse ResponseBuild() =>
-        new(123,
-            _username,
-            _email,
-            _creationDate);
+        new()
+        {
+            Id = _random.Next(),
+            Username = _username,
+            Email = _email,
+            CreationDate = _creationDate
+        };
 
     public ProfileBuilder WithUsername(string username)
     {

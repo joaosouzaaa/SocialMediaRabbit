@@ -7,6 +7,7 @@ public static class MappersDependencyInjection
 {
     public static void AddMappersDependencyInjection(this IServiceCollection services)
     {
+        services.AddScoped<IFollowMapper, FollowMapper>();
         services.AddScoped<IProfileMapper, ProfileMapper>();
     }
 }

@@ -8,4 +8,5 @@ public interface IProfileMapper
 {
     Profile SaveToDomain(ProfileSave profileSave);
     PageList<ProfileResponse> DomainPageListToResponsePageList(PageList<Profile> profilePageList);
+    ProfileResponse DomainToResponse(Profile profile);
 }

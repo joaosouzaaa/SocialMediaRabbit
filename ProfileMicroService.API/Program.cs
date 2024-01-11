@@ -18,12 +18,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseMiddleware<NotificationMiddleware>();
+}
 
 app.UseHttpsRedirection();
 app.UseCors(CorsPoliciesNamesConstants.CorsPolicy);
 app.UseAuthorization();
 app.MapControllers();
 app.MigrateDatabase();
-app.UseMiddleware<NotificationMiddleware>();
 
 app.Run();

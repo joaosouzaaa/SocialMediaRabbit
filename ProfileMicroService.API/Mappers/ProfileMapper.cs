@@ -25,9 +25,12 @@ public sealed class ProfileMapper : IProfileMapper
             TotalPages = profilePageList.TotalPages
         };
 
-    private ProfileResponse DomainToResponse(Profile profile) =>
-        new(profile.Id,
-            profile.Username,
-            profile.Email,
-            profile.CreationDate);
+    public ProfileResponse DomainToResponse(Profile profile) =>
+        new()
+        {
+            Id = profile.Id,
+            Username = profile.Username,
+            Email = profile.Email,
+            CreationDate = profile.CreationDate
+        };
 }

@@ -10,7 +10,7 @@ using ProfileMicroService.API.Settings.PaginationSettings;
 
 namespace ProfileMicroService.API.Services;
 
-public sealed class ProfileService : IProfileService
+public sealed class ProfileService : IProfileService, IProfileExistsServiceFacade
 {
     private readonly IProfileRepository _profileRepository;
     private readonly IProfileMapper _profileMapper;
@@ -42,6 +42,9 @@ public sealed class ProfileService : IProfileService
 
         return _profileMapper.DomainPageListToResponsePageList(profilePageList);
     }
+
+    public Task<bool> ExistsAsync(int id) =>
+        _profileRepository.ExistsAsync(id);
 
     private async Task<bool> IsValidAsync(Profile profile)
     {

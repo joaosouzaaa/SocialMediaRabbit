@@ -17,6 +17,7 @@ public static class DependencyInjectionHandler
             options.EnableSensitiveDataLogging();
         });
 
+        services.AddMassTransitDependencyInjection(configuration);
         services.AddSettingsDependencyInjection();
         services.AddFiltersDependencyInjection();
         services.AddRepositoriesDependencyInjection();

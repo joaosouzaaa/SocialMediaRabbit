@@ -1,26 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProfileMicroService.API.Data.DatabaseContexts;
+using ProfileMicroService.API.Data.Repositories.BaseRepositories;
 using ProfileMicroService.API.Entities;
 using ProfileMicroService.API.Interfaces.Repositories;
 using ProfileMicroService.API.Settings.PaginationSettings;
 
 namespace ProfileMicroService.API.Data.Repositories;
 
-public sealed class ProfileRepository : IProfileRepository, IDisposable
+public sealed class ProfileRepository : BaseRepository<Profile>, IProfileRepository
 {
-    private readonly ProfileDbContext _dbContext;
-    private DbSet<Profile> DbContextSet => _dbContext.Set<Profile>();
-
-    public ProfileRepository(ProfileDbContext dbContext)
+    public ProfileRepository(ProfileDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
     public async Task<bool> AddAsync(Profile profile)
     {
         await DbContextSet.AddAsync(profile);
 
-        return await _dbContext.SaveChangesAsync() > 0;
+        return await SaveChangesAsync();
     }
 
     public async Task<PageList<Profile>> GetAllPaginatedAsync(PageParameters pageParameters)
@@ -31,10 +28,6 @@ public sealed class ProfileRepository : IProfileRepository, IDisposable
         return new PageList<Profile>(profileList, count, pageParameters);
     }
 
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-
-        _dbContext.Dispose();
-    }
+    public Task<bool> ExistsAsync(int id) =>
+        DbContextSet.AsNoTracking().AnyAsync(p => p.Id == id);
 }

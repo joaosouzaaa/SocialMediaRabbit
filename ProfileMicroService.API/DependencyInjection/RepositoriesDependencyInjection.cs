@@ -7,6 +7,7 @@ public static class RepositoriesDependencyInjection
 {
     public static void AddRepositoriesDependencyInjection(this IServiceCollection services)
     {
+        services.AddScoped<IFollowRepository, FollowRepository>();
         services.AddScoped<IProfileRepository, ProfileRepository>();
     }
 }
