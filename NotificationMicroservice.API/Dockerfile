@@ -8,18 +8,18 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ProfileMicroService.API/ProfileMicroService.API.csproj", "ProfileMicroService.API/"]
+COPY ["NotificationMicroservice.API/NotificationMicroservice.API.csproj", "NotificationMicroservice.API/"]
 COPY ["Contracts/Contracts.csproj", "Contracts/"]
-RUN dotnet restore "./ProfileMicroService.API/./ProfileMicroService.API.csproj"
+RUN dotnet restore "./NotificationMicroservice.API/./NotificationMicroservice.API.csproj"
 COPY . .
-WORKDIR "/src/ProfileMicroService.API"
-RUN dotnet build "./ProfileMicroService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/NotificationMicroservice.API"
+RUN dotnet build "./NotificationMicroservice.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./ProfileMicroService.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./NotificationMicroservice.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ProfileMicroService.API.dll"]
+ENTRYPOINT ["dotnet", "NotificationMicroservice.API.dll"]

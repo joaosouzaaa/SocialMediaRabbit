@@ -32,3 +32,25 @@ services:
     depends_on:
       - "sqldataprofile"
       - "socialmediarabbitmq"
+
+  sqldatanotification:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql-container-notification
+    environment:
+      - SA_PASSWORD=TestNotification123
+      - ACCEPT_EULA=Y
+   
+  notificationmicroservice.api:
+    image: ${DOCKER_REGISTRY-}notificationmicroserviceapi
+    build:
+      context: .
+      dockerfile: NotificationMicroService.API/Dockerfile
+    environment:
+      - DOCKER_ENVIROMENT=DEV_DOCKER_NOTIFICATION
+      - ASPNETCORE_ENVIROMENT=Development
+    ports:
+        - "5030:80"
+        - "5031:443"
+    depends_on:
+      - "sqldatanotification"
+      - "socialmediarabbitmq"
